@@ -21,37 +21,16 @@
     Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
     Cookie: _ga=GA1.2.499341894.1587651143; _gid=GA1.2.1311096930.1587784208
 
-4,tac需要实时获取，具体看下面的三条 TODO 注释
+4,tac需要实时获取，具体看下面 TODO 注释
 * */
 
-require('babel-register')();
-
-const canvas = require('canvas');
 const {JSDOM} = require('jsdom');
 const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
 const {window} = jsdom;
 
-const canvasMethods = ['HTMLCanvasElement'];
-Object.keys(window).forEach(property => {
-    try {
-        if (typeof global[property] === 'undefined') {
-            global[property] = window[property];
-        }   
-    }catch (e) {
-        // console.log(e);
-    };
-});
-
-canvasMethods.forEach(method =>
-    global[method] = window[method]
-);
-
-global['CanvasRenderingContext2D'] = canvas.Context2d;
-
 var oldG = 0;
 function generateSignature(url) {
     this.navigator = {
-        // TODO UA与下面指纹统一,  修改的话下面的指纹也要统一修改。
         userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
     }
     var e = {}
@@ -103,17 +82,6 @@ function generateSignature(url) {
                 }
 
                 g = t.charCodeAt(b++) - 32;
-
-                // TODO : 该指纹末尾的字符不受检测， 可随意删减更换， 修改后_signature也会改变。一般不用动，等这个指纹被封了后再修改。
-                if(oldG==67 && g==83 && v.length==7 && v[0].indexOf("data:image")==0)
-                {
-                    v[0]="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAQCAYAAABQrvyxAAACJ0lEQVRIS8XVP6iPYRQH8M9dFIOFzcZgo6yySP4tBoPyp8RgUwaTcMuklFLils2fMhhMkrolLAYlk02KDCwWZaGj59S5j/f93fvLve67vO/7nOc9z/d7zvd73hkLr1/de7zOtLWI5fPAttVZGgKUQHvAPbnVJrMVpyuIoepnWXuwK92NDbiPfV1f53AOP/AXgdg7VPUqoZrvf3fgGDbjSgMxSqAX85gHKtlIfqIlv4SzeI9Yv4dYy4Mjfxz+ENvbYbWyQ2Zai+t4hMM4k98tJo2l+GAnXhYgb7ADt3EUD3C1kEp5BKFXSHAvmmyGCPTVzyIs8EAvocXklOQz+Xw7eTc24Tse4ytuFAKVcHYmcuwq+q4kamxd5425MRPHepq6PudYrbGsaMSiqjdxGQdwARs7Alm9SmqIQOaNLlX5JbnBKZRg6712ph+xsy1b3qO6F3EL29rBcVAFG5/kvgD+rXmldiByxJ6MD8lqyWO070BNFgZ9jjttMYF9wN2m8UrgYzNjmPBpAThJQr3h8/zjIafFRuGkeR+xL9iPt4VAGLqCqwRi20G8bp0a60CCzOnWdyKN/+lfPfAMe0tL0qB1bI514E8F27djHQgpxXAIH/RX5J3tCUzjgaj+KTwZEugyrQWx8zjS/iuZdrQDPYE6dTK2vo3IjC0T1tE0U3tgDX6OpIuKXEP8OXPyrDSBifmHTHwIJ9sP6HP7H2zBHrxrU2QlZTNVQX4DTq2qHj6b0/gAAAAASUVORK5CYII=";
-                }
-
-                if( g==11 && oldG==0 && v.length==5 && typeof v[0] =='string' && v[0].length==10 && typeof v[1] =='string' && v[1].length == 6)
-                {
-                    k[5]=0;
-                }
 
                 oldG = g;
 
@@ -318,8 +286,7 @@ global.document = window.document;
 
 module.exports = generateSignature;
 
+// test:
 var nonce = '102777167489';  // userId
-
 var _signature = generateSignature(nonce);
 console.log(_signature);
-
