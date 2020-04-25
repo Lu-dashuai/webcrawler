@@ -277,6 +277,7 @@ function generateSignature(url) {
 
 // TODO : tac有过期时间， 需要实时在页面(https://www.iesdouyin.com/share/user/102777167489)获取, 获取逻辑省略。
 global.tac='';
+    
 
 global.window = window;
 global.document = window.document;
