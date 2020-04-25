@@ -28,7 +28,6 @@ const {JSDOM} = require('jsdom');
 const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
 const {window} = jsdom;
 
-var oldG = 0;
 function generateSignature(url) {
     this.navigator = {
         userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
@@ -82,8 +81,6 @@ function generateSignature(url) {
                 }
 
                 g = t.charCodeAt(b++) - 32;
-
-                oldG = g;
 
                 switch (g) {
                     case 1:
